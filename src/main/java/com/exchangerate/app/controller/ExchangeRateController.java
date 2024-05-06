@@ -3,11 +3,11 @@ package com.exchangerate.app.controller;
 import com.exchangerate.app.model.Rate;
 import com.exchangerate.app.client.ExchangeRateClientXML;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.xml.sax.SAXException;
 
-import javax.websocket.server.PathParam;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.List;
@@ -17,12 +17,16 @@ import java.util.List;
 public class ExchangeRateController {
 
     @GetMapping(value = "/list", produces = "application/json")
-    public List<Rate> getRateList() throws IOException, SAXException, ParserConfigurationException {
-        return ExchangeRateClientXML.getRateList();
+    public List<Rate> getRateList() {
+        ExchangeRateClientXML exchangeRateClientXML = new ExchangeRateClientXML();
+
+        return exchangeRateClientXML.getRateList();
     }
 
     @GetMapping(value = "/cc/{cc}")
-    public Rate getRateByCc(@PathParam("cc") String cc) throws IOException, SAXException, ParserConfigurationException {
-        return ExchangeRateClientXML.getRate(cc);
+    public Rate getRateByCc(@PathVariable("cc") String cc) {
+        ExchangeRateClientXML exchangeRateClientXML = new ExchangeRateClientXML();
+
+        return exchangeRateClientXML.getRate(cc);
     }
 }

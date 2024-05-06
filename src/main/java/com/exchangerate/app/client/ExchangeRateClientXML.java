@@ -9,7 +9,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.print.attribute.standard.DocumentName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -23,13 +22,9 @@ import java.util.List;
 public class ExchangeRateClientXML {
     private static final String XML_EXCHANGE_RATE_URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange";
 
-    public static List<Rate> getRateList() throws ParserConfigurationException, IOException, SAXException {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse(new URL(XML_EXCHANGE_RATE_URL).openStream());
-        document.getDocumentElement().normalize();
+    public List<Rate> getRateList() {
+        NodeList currencyList = getDocument().getElementsByTagName("currency");
 
-        NodeList currencyList = document.getElementsByTagName("currency");
         List<Rate> rates = new ArrayList<>();
 
         for (int i = 0; i < currencyList.getLength(); i++) {
@@ -47,13 +42,8 @@ public class ExchangeRateClientXML {
         return rates;
     }
 
-    public static Rate getRate(String cc) throws ParserConfigurationException, IOException, SAXException {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse(new URL(XML_EXCHANGE_RATE_URL).openStream());
-        document.getDocumentElement().normalize();
-
-        NodeList currencyList = document.getElementsByTagName("currency");
+    public Rate getRate(String cc) {
+        NodeList currencyList = getDocument().getElementsByTagName("currency");
 
         Rate rate = null;
 
@@ -65,13 +55,28 @@ public class ExchangeRateClientXML {
                 String exRate = currencyElement.getElementsByTagName("rate").item(0).getTextContent().trim();
                 String exCC = currencyElement.getElementsByTagName("cc").item(0).getTextContent().trim();
                 String exDate = currencyElement.getElementsByTagName("exchangedate").item(0).getTextContent().trim();
-                rate = new Rate(exTxt, exRate, exCC, exDate);
-                if (rate.getCc().equals(cc)) {
+                if (exCC.equals(cc)) {
+                    rate = new Rate(exTxt, exRate, exCC, exDate);
                     break;
                 }
             }
         }
 
         return rate;
+    }
+
+    private Document getDocument() {
+        try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(new URL(XML_EXCHANGE_RATE_URL).openStream());
+            document.getDocumentElement().normalize();
+
+            return document;
+        } catch (ParserConfigurationException | SAXException | MalformedURLException e) {
+            throw new RuntimeException("Can't get a Document instance ", e);
+        } catch (IOException e) {
+            throw new RuntimeException("Can't open stream from parsed document", e);
+        }
     }
 }
