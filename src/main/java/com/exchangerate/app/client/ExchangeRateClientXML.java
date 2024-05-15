@@ -1,6 +1,5 @@
 package com.exchangerate.app.client;
 
-
 import com.exchangerate.app.model.Rate;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
@@ -20,7 +19,7 @@ import java.util.List;
 
 @Component
 public class ExchangeRateClientXML {
-    private static final String XML_EXCHANGE_RATE_URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange";
+    private static final String XML_EXCHANGE_RATE_URL = "{application.endpoint.client.root}";
 
     public List<Rate> getRateList() {
         NodeList currencyList = getDocument().getElementsByTagName("currency");
@@ -74,9 +73,9 @@ public class ExchangeRateClientXML {
 
             return document;
         } catch (ParserConfigurationException | SAXException | MalformedURLException e) {
-            throw new RuntimeException("Can't get a Document instance ", e);
+            throw new RuntimeException("Couldn't get Document instance ", e);
         } catch (IOException e) {
-            throw new RuntimeException("Can't open stream from parsed document", e);
+            throw new RuntimeException("Couldn't open stream from parsed document", e);
         }
     }
 }
