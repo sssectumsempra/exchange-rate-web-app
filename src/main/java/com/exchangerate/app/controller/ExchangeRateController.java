@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "{application.endpoint.controller.root}")
+@RequestMapping(value = "/api/v1/ex-rate"/*"${application.endpoint.controller.root}"*/)
 @RequiredArgsConstructor
 public class ExchangeRateController {
 
@@ -24,5 +24,12 @@ public class ExchangeRateController {
     @GetMapping(value = "/cc/{cc}", produces = "application/json")
     public Rate getRateByCc(@PathVariable("cc") String cc) {
         return exchangeRateClientXML.getRate(cc);
+    }
+
+    @GetMapping(value = "/cc/{cc}/{amount}", produces = "application/json")
+    public Double getUAHByCCAndAmount(@PathVariable("cc") String cc, @PathVariable("amount") int moneyAmount) {
+        double UahAmount = Double.parseDouble(exchangeRateClientXML.getRate(cc).getRate()) * moneyAmount;
+
+        return UahAmount;
     }
 }

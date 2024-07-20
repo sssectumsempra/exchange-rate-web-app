@@ -19,7 +19,8 @@ import java.util.List;
 
 @Component
 public class ExchangeRateClientXML {
-    private static final String XML_EXCHANGE_RATE_URL = "{application.endpoint.client.root}";
+    //private static final String XML_EXCHANGE_RATE_URL = "${application.endpoint.client.root}";
+    private static final String XML_EXCHANGE_RATE_URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange";
 
     public List<Rate> getRateList() {
         NodeList currencyList = getDocument().getElementsByTagName("currency");
