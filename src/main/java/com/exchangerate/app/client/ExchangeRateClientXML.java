@@ -65,6 +65,27 @@ public class ExchangeRateClientXML {
         return rate;
     }
 
+    public Double getUahByCcAndAmount(String cc, int moneyAmount) {
+        NodeList currencyList = getDocument().getElementsByTagName("currency");
+
+        Double UahAmount = null;
+
+        for (int i = 0; i < currencyList.getLength(); i++) {
+            Node currencyNode = currencyList.item(i);
+            if (currencyNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element currencyElement = (Element) currencyNode;;
+                String exRate = currencyElement.getElementsByTagName("rate").item(0).getTextContent().trim();
+                String exCC = currencyElement.getElementsByTagName("cc").item(0).getTextContent().trim();
+                if (exCC.equals(cc)) {
+                    UahAmount = Double.parseDouble(exRate) * moneyAmount;
+                    break;
+                }
+            }
+        }
+
+        return UahAmount;
+    }
+
     private Document getDocument() {
         try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();

@@ -28,8 +28,12 @@ public class ExchangeRateController {
 
     @GetMapping(value = "/cc/{cc}/{amount}", produces = "application/json")
     public Double getUAHByCCAndAmount(@PathVariable("cc") String cc, @PathVariable("amount") int moneyAmount) {
-        double UahAmount = Double.parseDouble(exchangeRateClientXML.getRate(cc).getRate()) * moneyAmount;
+        return exchangeRateClientXML.getUahByCcAndAmount(cc, moneyAmount);
+    }
 
-        return UahAmount;
+    //todo need to check
+    @GetMapping(value = "/uah/{uah}/{currency}", produces = "application/json")
+    public Double getSomeRateByUah(@PathVariable("uah") int uah, @PathVariable("cc") String currency) {
+        return uah / Double.parseDouble(exchangeRateClientXML.getRate(currency).getRate());
     }
 }
