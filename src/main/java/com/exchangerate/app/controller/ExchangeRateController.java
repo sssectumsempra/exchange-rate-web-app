@@ -31,9 +31,8 @@ public class ExchangeRateController {
         return exchangeRateClientXML.getUahByCcAndAmount(cc, moneyAmount);
     }
 
-    //todo need to check
-    @GetMapping(value = "/uah/{uah}/{currency}", produces = "application/json")
+    @GetMapping(value = "/uah/{uah}/{cc}", produces = "application/json")
     public Double getSomeRateByUah(@PathVariable("uah") int uah, @PathVariable("cc") String currency) {
-        return uah / Double.parseDouble(exchangeRateClientXML.getRate(currency).getRate());
+        return exchangeRateClientXML.getSomeRateByUah(uah, currency);
     }
 }

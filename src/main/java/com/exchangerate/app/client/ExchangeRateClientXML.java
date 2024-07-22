@@ -55,7 +55,7 @@ public class ExchangeRateClientXML {
                 String exRate = currencyElement.getElementsByTagName("rate").item(0).getTextContent().trim();
                 String exCC = currencyElement.getElementsByTagName("cc").item(0).getTextContent().trim();
                 String exDate = currencyElement.getElementsByTagName("exchangedate").item(0).getTextContent().trim();
-                if (exCC.equals(cc)) {
+                if (exCC.equalsIgnoreCase(cc)) {
                     rate = new Rate(exTxt, exRate, exCC, exDate);
                     break;
                 }
@@ -76,7 +76,7 @@ public class ExchangeRateClientXML {
                 Element currencyElement = (Element) currencyNode;;
                 String exRate = currencyElement.getElementsByTagName("rate").item(0).getTextContent().trim();
                 String exCC = currencyElement.getElementsByTagName("cc").item(0).getTextContent().trim();
-                if (exCC.equals(cc)) {
+                if (exCC.equalsIgnoreCase(cc)) {
                     UahAmount = Double.parseDouble(exRate) * moneyAmount;
                     break;
                 }
@@ -84,6 +84,27 @@ public class ExchangeRateClientXML {
         }
 
         return UahAmount;
+    }
+
+    public Double getSomeRateByUah(int uah, String currency) {
+        NodeList currencyList = getDocument().getElementsByTagName("currency");
+
+        Double someRate = null;
+
+        for (int i = 0; i < currencyList.getLength(); i++) {
+            Node currencyNode = currencyList.item(i);
+            if (currencyNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element currencyElement = (Element) currencyNode;
+                String exRate = currencyElement.getElementsByTagName("rate").item(0).getTextContent().trim();
+                String exCC = currencyElement.getElementsByTagName("cc").item(0).getTextContent().trim();
+                if (exCC.equalsIgnoreCase(currency)) {
+                    someRate = uah / Double.parseDouble(exRate);
+                    break;
+                }
+            }
+        }
+
+        return someRate;
     }
 
     private Document getDocument() {
