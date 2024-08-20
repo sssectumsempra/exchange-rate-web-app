@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Currency {
     @JsonIgnore
     @Id
@@ -30,9 +33,11 @@ public class Currency {
     private Double rate;
 
     @JsonProperty("cc")
+    @Column(name = "currency_code")
     private String currencyCode;
 
     @JsonProperty("exchangedate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    @Column(name = "exchange_date")
     private LocalDate exchangeDate;
 }
