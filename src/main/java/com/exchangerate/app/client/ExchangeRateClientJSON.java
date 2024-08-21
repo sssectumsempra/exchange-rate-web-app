@@ -83,7 +83,7 @@ public class ExchangeRateClientJSON {
         HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create(JSON_EXCHANGE_RATE_URL)).GET().build();
         HttpClient httpClient = HttpClient.newBuilder().build();
 
-        HttpResponse<String> httpResponse = null;
+        HttpResponse<String> httpResponse;
 
         try {
             httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
