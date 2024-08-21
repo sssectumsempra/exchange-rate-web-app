@@ -18,6 +18,8 @@ target/
 *.iws
 *.iml
 *.ipr
+ssh_key.txt
+ssh_key.txt.pub
 
 ### NetBeans ###
 /nbproject/private/

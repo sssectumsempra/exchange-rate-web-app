@@ -1,6 +1,5 @@
 package com.exchangerate.app.controller;
 
-import com.exchangerate.app.client.ExchangeRateClientJSON;
 import com.exchangerate.app.model.Currency;
 import com.exchangerate.app.service.exrate.ExchangeRateService;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +30,8 @@ public class ExchangeRateController {
     }
 
     @GetMapping(value = "/currencies/cc/{cc}/amount/{amount}")
-    public Double getUAHByCcAnoCurrencyAmount (@PathVariable("cc") String cc,
-                                               @PathVariable("amount") double currencyAmount) {
+    public Double getUAHByCcAnoCurrencyAmount(@PathVariable("cc") String cc,
+                                              @PathVariable("amount") double currencyAmount) {
         return exchangeRateService.getUahByCcAndCurrencyAmount(cc, currencyAmount);
     }
 
