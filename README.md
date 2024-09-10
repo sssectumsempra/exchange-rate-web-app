@@ -2,6 +2,10 @@
 
 #### REST API for an ExchangeRate Application
 
+There is an application that provides the user with 
+a set of functions for obtaining information about 
+exchange rates, as well as additional functions for this.
+
 ## Install application:
 - Clone application to your directory:
 `git clone https://github.com/arrogante-it/exchange-rate-web-app.git`
