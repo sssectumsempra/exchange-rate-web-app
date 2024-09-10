@@ -20,6 +20,10 @@ target/
 *.ipr
 ssh_key.txt
 ssh_key.txt.pub
+.mvn/
+mvnw
+mvnw.cmd
+
 
 ### NetBeans ###
 /nbproject/private/
