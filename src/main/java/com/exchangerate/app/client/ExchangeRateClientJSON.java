@@ -80,20 +80,24 @@ public class ExchangeRateClientJSON {
     }
 
     private Currency[] getCurrenciesArray() {
+        log.info("Getting http request by URL...");
         HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create(JSON_EXCHANGE_RATE_URL)).GET().build();
+
+        log.info("Building http client...");
         HttpClient httpClient = HttpClient.newBuilder().build();
 
         HttpResponse<String> httpResponse;
 
         try {
+            log.info("Sending http request...");
             httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             String jsonValueToString = httpResponse.body();
 
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
 
+            log.info("Reading value to array from bytes...");
             currencies = objectMapper.readValue(jsonValueToString.getBytes(), Currency[].class);
-
         } catch (IOException | InterruptedException e) {
             log.error("Exception occured {}", e.getMessage());
         }
