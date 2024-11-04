@@ -16,6 +16,7 @@ exchange rates, as well as additional functions for this.
 - JDK 11 or higher
 - Maven 4.0.0 or higher
 - Flyway 6.0.8 or lower
+- MySQL 8.3.0 or lower
 
 ## Program main functional:
 
