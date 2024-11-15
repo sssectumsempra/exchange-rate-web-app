@@ -17,6 +17,7 @@ exchange rates, as well as additional functions for this.
 - Maven 4.0.0 or higher
 - Flyway 6.0.8 or lower
 - MySQL 8.3.0 or lower
+- Docker 27.3.1
 
 ## Program main functional:
 
