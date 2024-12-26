@@ -2,7 +2,7 @@ package com.exchangerate.app.client;
 
 import com.exchangerate.app.model.Currency;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -13,21 +13,25 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
-public class ExchangeRateClientJSON {
+public class ExchangeRateClient { //Do we have some other not *JSON clients?
     private static final String JSON_EXCHANGE_RATE_URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
-    private static Currency[] currencies = null;
-    private static Currency currency = null;
+    private static Currency[] currencies = null; //Why we store this in class filed?
+    private static Currency currency = null;  //Same
+
+    private final HttpClient httpClient;
+    private final ObjectMapper objectMapper;
 
     public Currency[] getCurrencies() {
         if (getCurrenciesArray() == null) {
             log.error("currencies array is empty");
-            throw new RuntimeException();
+            throw new RuntimeException(); // What kind of exception should be here? Current exception too wide
         }
-
         return getCurrenciesArray();
     }
 
+    // You shouldn't leave unused code
     public Currency getCurrencyByCc(String cc) {
         if (getCurrenciesArray() == null) {
             log.error("currencies array is empty");
@@ -46,6 +50,7 @@ public class ExchangeRateClientJSON {
         return currency;
     }
 
+    // You shouldn't leave unused code
     public Double getUAHbyCcAndCurrencyAmount(String cc, double currencyAmount) {
         if (getCurrenciesArray() == null) {
             log.error("currencies array is empty");
@@ -64,6 +69,7 @@ public class ExchangeRateClientJSON {
         return currencyAmount;
     }
 
+    // You shouldn't leave unused code
     public Double getCurrencyAmountByUAHAmount(int uahAmount, String cc) {
         currencies = getCurrenciesArray();
 
@@ -83,8 +89,8 @@ public class ExchangeRateClientJSON {
         log.info("Getting http request by URL...");
         HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create(JSON_EXCHANGE_RATE_URL)).GET().build();
 
-        log.info("Building http client...");
-        HttpClient httpClient = HttpClient.newBuilder().build();
+        // No need to log every operation, how it can help?
+        //HttpCline can be build 1 time and injected
 
         HttpResponse<String> httpResponse;
 
@@ -93,13 +99,12 @@ public class ExchangeRateClientJSON {
             httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             String jsonValueToString = httpResponse.body();
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
+            //Object mapper can be created once
 
-            log.info("Reading value to array from bytes...");
             currencies = objectMapper.readValue(jsonValueToString.getBytes(), Currency[].class);
         } catch (IOException | InterruptedException e) {
-            log.error("Exception occured {}", e.getMessage());
+            log.error("Exception occurred while sending http request {}", e.getMessage());
+            //if you do logging it should help you in investigation
         }
 
         return currencies;
