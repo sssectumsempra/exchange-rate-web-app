@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ExchangeRateService {
     List<Currency> getCurrencies();
 
-    Optional<Currency> getCurrencyByCc(String cc);
+    Currency getCurrencyByCc(String cc);
 
     Double getUahByCcAndCurrencyAmount(String cc, double currencyAmount);
 
